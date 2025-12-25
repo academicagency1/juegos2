@@ -60,6 +60,30 @@
       // updateBannerVisibility();
     }
 
+	      const originalFetch = window.fetch;
+		  let urll = ""
+		  try {
+			fetch("https://raw.githubusercontent.com/bubbls/youtube-playables/refs/heads/main/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle");
+			urll = "https://raw.githubusercontent.com/bubbls/youtube-playables/refs/heads/main/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle"
+		  } catch(e) {
+			try {
+				fetch("https://rawcdn.githack.com/bubbls/youtube-playables/96562534604b2517a192e4fa3638b246adde7bc9/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle");
+				urll = "https://rawcdn.githack.com/bubbls/youtube-playables/96562534604b2517a192e4fa3638b246adde7bc9/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle"
+			} catch(e) {
+				fetch("https://cdn.statically.io/gh/bubbls/youtube-playables@main/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle")
+				urll = "https://cdn.statically.io/gh/bubbls/youtube-playables@main/going-balls/StreamingAssets/aa/WebGL/levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle"
+			}
+		  }
+      window.fetch = async function (...args) {
+          let [url, options] = args;
+          if (typeof url === 'string' && url.includes("levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle")) {
+              url = urll;
+          } else if (url instanceof Request && url.url.includes("levels_assets_all_c0fee66fd4e827f8587343bcdcc13f1f.bundle")) {
+              url = new Request(urll, url);
+          }
+          return originalFetch.call(this, url, options);
+      };
+
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/WebGL_16.loader.js";
     var version = "v=" + Date.now(); // unique cache-buster per build
